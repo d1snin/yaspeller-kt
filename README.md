@@ -1,7 +1,7 @@
 # yaspeller-kt
 Asynchronous Yandex.Speller API wrapper for Kotlin/JVM.
 
-# Installation
+### Installation
 ```groovy
 repositories {
     maven { 
@@ -12,7 +12,7 @@ repositories {
 implementation 'com.github.d1snin:yaspeller-kt:0.1.0-beta.0'
 ```
 
-# Example usage
+### Example usage
 ```kotlin
 suspend fun main() {
     val word = "hawdwawe"
