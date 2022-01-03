@@ -7,4 +7,7 @@ data class SpellCheckResult(
     val length: Int,
     val word: String,
     val suggestions: List<String>
-)
+) {
+
+    val firstSuggestion get() = suggestions.first()
+}
