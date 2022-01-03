@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "uno.d1s"
-version = "0.1.1-beta.0"
+version = "0.1.2-beta.0"
 
 repositories {
     mavenCentral()
