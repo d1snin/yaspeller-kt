@@ -16,8 +16,8 @@ suspend fun String.checkSpelling(config: RequestConfiguration.() -> Unit = {}) =
 suspend fun List<String>.checkSpellings(config: RequestConfiguration.() -> Unit = {}) =
     yaSpeller.checkTexts(this, RequestConfiguration().apply(config))
 
-suspend fun String.suggestSpellings(config: RequestConfiguration.() -> Unit = {}) =
-    this.checkSpelling(config)[0].suggestions
-
-suspend fun String.suggestSpelling(config: RequestConfiguration.() -> Unit = {}) =
+suspend fun String.spellingSuggestion(config: RequestConfiguration.() -> Unit = {}) =
     this.checkSpelling(config)[0].firstSuggestion
+
+suspend fun String.spellingSuggestions(config: RequestConfiguration.() -> Unit = {}) =
+    this.checkSpelling(config)[0].suggestions

@@ -8,7 +8,7 @@ internal class ApiTest {
     @Test
     fun `pls work`() {
         runBlocking {
-            assertEquals("hardware", "hawdwarle".suggestSpellings()[0])
+            assertEquals("hardware", "hawdwarle".checkSpelling()[0].firstSuggestion)
         }
     }
 }
