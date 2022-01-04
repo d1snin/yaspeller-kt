@@ -1,5 +1,5 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("maven")
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.serialization") version "1.4.21"
 }
@@ -19,4 +19,13 @@ dependencies {
     implementation("io.ktor:ktor-client-serialization:${property("ktorVersion")}")
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-annotations-common"))
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    sourceCompatibility = "1.8"
+}
+
+tasks.withType<Wrapper> {
+    gradleVersion = "6.1.1"
+    distributionType = Wrapper.DistributionType.ALL
 }
