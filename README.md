@@ -16,7 +16,7 @@ implementation 'com.github.d1snin:yaspeller-kt:0.1.1-beta.0'
 ```kotlin
 suspend fun main() {
     val word = "hawdwawe"
-    val suggestions = "hawdwawe".spellingSuggestion()
-    println(suggestions[0]) // the first suggestion: hardware
+    val suggestion = "hawdwawe".spellingSuggestion() // first spelling suggestions for the first word
+    println(suggestion) // hardware
 }
 ```
