@@ -8,7 +8,13 @@ internal class ApiTest {
     @Test
     fun `pls work`() {
         runBlocking {
-            assertEquals("hardware", "hawdwarle".checkSpelling()[0].firstSuggestion)
+            configureSpeller {
+                languages {
+                    english()
+                }
+            }
+
+            assertEquals("hardware", "hawdwarle".checkSpelling().improvedText)
         }
     }
 }

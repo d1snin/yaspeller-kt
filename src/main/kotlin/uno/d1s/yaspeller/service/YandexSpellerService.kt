@@ -1,17 +1,14 @@
 package uno.d1s.yaspeller.service
 
-import uno.d1s.yaspeller.domain.api.SpellCheckResult
-import uno.d1s.yaspeller.domain.api.RequestConfiguration
+import uno.d1s.yaspeller.domain.api.TextSpellCheckResult
+import uno.d1s.yaspeller.dsl.RequestConfigurationDsl
 
 internal interface YandexSpellerService {
 
     suspend fun checkText(
         text: String,
-        configuration: RequestConfiguration = RequestConfiguration()
-    ): List<SpellCheckResult>
+        configuration: RequestConfigurationDsl.() -> Unit
+    ): TextSpellCheckResult
 
-    suspend fun checkTexts(
-        texts: List<String>,
-        configuration: RequestConfiguration = RequestConfiguration()
-    ): List<List<SpellCheckResult>>
+    fun setDefaultConfiguration(configuration: RequestConfigurationDsl.() -> Unit)
 }

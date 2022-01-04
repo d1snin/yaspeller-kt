@@ -1,23 +1,14 @@
 package uno.d1s.yaspeller
 
-import uno.d1s.yaspeller.domain.api.Language
-import uno.d1s.yaspeller.domain.api.RequestConfiguration
+import uno.d1s.yaspeller.dsl.RequestConfigurationDsl
 import uno.d1s.yaspeller.factory.yandexSpeller
 
 internal val yaSpeller = yandexSpeller()
+internal var defaultConfig: RequestConfigurationDsl.() -> Unit = {}
 
-val russian = Language.RUSSIAN
-val ukrainian = Language.UKRAINIAN
-val english = Language.ENGLISH
+fun configureSpeller(config: RequestConfigurationDsl.() -> Unit) {
+    defaultConfig = config
+}
 
-suspend fun String.checkSpelling(config: RequestConfiguration.() -> Unit = {}) =
-    yaSpeller.checkText(this, RequestConfiguration().apply(config))
-
-suspend fun List<String>.checkSpellings(config: RequestConfiguration.() -> Unit = {}) =
-    yaSpeller.checkTexts(this, RequestConfiguration().apply(config))
-
-suspend fun String.spellingSuggestion(config: RequestConfiguration.() -> Unit = {}) =
-    this.checkSpelling(config)[0].firstSuggestion
-
-suspend fun String.spellingSuggestions(config: RequestConfiguration.() -> Unit = {}) =
-    this.checkSpelling(config)[0].suggestions
+suspend fun String.checkSpelling(config: RequestConfigurationDsl.() -> Unit = defaultConfig) =
+    yaSpeller.checkText(this, config)

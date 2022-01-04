@@ -1,6 +1,6 @@
 package uno.d1s.yaspeller.domain.api
 
-data class SpellCheckResult(
+data class WordSpellCheckResult(
     val position: Int,
     val row: Int,
     val column: Int,

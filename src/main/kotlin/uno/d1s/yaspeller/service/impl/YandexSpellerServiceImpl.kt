@@ -5,15 +5,16 @@ import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.*
 import io.ktor.client.request.*
 import uno.d1s.yaspeller.constant.*
-import uno.d1s.yaspeller.domain.api.RequestConfiguration
-import uno.d1s.yaspeller.domain.api.SpellCheckResult
+import uno.d1s.yaspeller.domain.api.TextSpellCheckResult
 import uno.d1s.yaspeller.domain.internal.InternalSpellCheckResult
+import uno.d1s.yaspeller.dsl.RequestConfigurationDsl
 import uno.d1s.yaspeller.exception.SpellCheckFailedException
 import uno.d1s.yaspeller.exception.TooLongTextException
 import uno.d1s.yaspeller.service.YandexSpellerService
-import uno.d1s.yaspeller.util.toCommaSeparatedString
 
 internal object YandexSpellerServiceImpl : YandexSpellerService {
+
+    private var defaultConfig: RequestConfigurationDsl.() -> Unit = {}
 
     private val httpClient: HttpClient = HttpClient(OkHttp) {
         install(JsonFeature)
@@ -29,36 +30,50 @@ internal object YandexSpellerServiceImpl : YandexSpellerService {
         }
     }
 
-    override suspend fun checkText(text: String, configuration: RequestConfiguration): List<SpellCheckResult> {
+    override suspend fun checkText(
+        text: String,
+        configuration: RequestConfigurationDsl.() -> Unit
+    ): TextSpellCheckResult {
         if (text.length > MAX_TEXT_LENGTH) {
             throw TooLongTextException
         }
 
-        return try {
-            httpClient.post<List<InternalSpellCheckResult>>(BASE_URL) {
-                parameter(PARAMETER_LANGUAGE, configuration.languages.map {
-                    it.parameter
-                }.toCommaSeparatedString())
+        val config = RequestConfigurationDsl().apply(defaultConfig).apply(configuration).toInternal()
+
+        try {
+            val results = httpClient.post<List<InternalSpellCheckResult>>(BASE_URL) {
+                parameter(PARAMETER_LANGUAGE, config.languages)
                 parameter(PARAMETER_TEXT, text)
-                parameter(PARAMETER_OPTIONS,
-                    configuration.options.sumOf {
-                        it.optionValue
-                    }
-                )
-                parameter(PARAMETER_FORMAT, configuration.format.parameter)
+                parameter(PARAMETER_OPTIONS, config.options)
+                parameter(PARAMETER_FORMAT, config.format)
             }.map {
                 it.toApi()
             }
+
+            var improvedText = text
+
+            results.forEach {
+                improvedText = improvedText.replace(it.word, it.firstSuggestion)
+            }
+
+            return TextSpellCheckResult(
+                results.isEmpty(),
+                results.size,
+                results.map {
+                    it.word
+                },
+                results.map {
+                    it.firstSuggestion
+                },
+                results,
+                improvedText
+            )
         } catch (ex: Exception) {
             throw SpellCheckFailedException("Spell check failed: ${ex.message ?: "no message provided."}")
         }
     }
 
-    override suspend fun checkTexts(
-        texts: List<String>,
-        configuration: RequestConfiguration
-    ): List<List<SpellCheckResult>> =
-        texts.map {
-            this.checkText(it, configuration)
-        }
+    override fun setDefaultConfiguration(configuration: RequestConfigurationDsl.() -> Unit) {
+        defaultConfig = configuration
+    }
 }
