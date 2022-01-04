@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "uno.d1s"
-version = "0.2.0-beta.1"
+version = "0.2.0-beta.2"
 
 repositories {
     mavenCentral()
@@ -19,6 +19,18 @@ dependencies {
     implementation("io.ktor:ktor-client-serialization:${property("ktorVersion")}")
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-annotations-common"))
+}
+
+tasks.withType<Jar> {
+    from(configurations.compileClasspath.get().files.filter {
+        it.exists()
+    }.map {
+        if (!it.isDirectory) {
+            zipTree(it)
+        } else {
+            it
+        }
+    })
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
