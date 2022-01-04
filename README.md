@@ -9,7 +9,7 @@ repositories {
     }
 }
 
-implementation 'com.github.d1snin:yaspeller-kt:0.2.0-beta.0'
+implementation 'com.github.d1snin:yaspeller-kt:0.2.0-beta.1'
 ```
 
 ### Example usage
