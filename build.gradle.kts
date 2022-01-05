@@ -1,6 +1,6 @@
 plugins {
-    id("maven")
     id("java-library")
+    id("com.github.johnrengelman.shadow") version "7.1.2"
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.serialization") version "1.4.21"
 }
@@ -13,10 +13,8 @@ repositories {
 }
 
 extra["ktorVersion"] = "1.6.7"
-extra["okhttpVersion"] = "4.9.3"
 
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:${property("okhttpVersion")}")
     implementation("io.ktor:ktor-client-okhttp:${property("ktorVersion")}")
     implementation("io.ktor:ktor-client-serialization:${property("ktorVersion")}")
     implementation(kotlin("stdlib"))
@@ -26,9 +24,4 @@ dependencies {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     sourceCompatibility = "1.8"
-}
-
-tasks.withType<Wrapper> {
-    gradleVersion = "6.1.1"
-    distributionType = Wrapper.DistributionType.ALL
 }
