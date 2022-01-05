@@ -11,7 +11,7 @@ repositories {
     }
 }
 
-implementation 'com.github.d1snin:yaspeller-kt:0.2.0-beta.2'
+implementation 'com.github.d1snin:yaspeller-kt:0.2.1-beta.2'
 ```
 
 ### Example usage
