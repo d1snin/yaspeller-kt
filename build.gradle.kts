@@ -22,18 +22,6 @@ dependencies {
     testImplementation(kotlin("test-annotations-common"))
 }
 
-tasks.withType<Jar> {
-    from(configurations.compileClasspath.get().files.filter {
-        it.exists()
-    }.map {
-        if (!it.isDirectory) {
-            zipTree(it)
-        } else {
-            it
-        }
-    })
-}
-
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     sourceCompatibility = "1.8"
 }
