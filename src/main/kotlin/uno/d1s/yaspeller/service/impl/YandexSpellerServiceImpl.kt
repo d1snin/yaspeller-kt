@@ -1,62 +1,42 @@
 package uno.d1s.yaspeller.service.impl
 
-import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.json.*
-import io.ktor.client.request.*
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import uno.d1s.yaspeller.constant.*
 import uno.d1s.yaspeller.domain.api.TextSpellCheckResult
+import uno.d1s.yaspeller.domain.api.WordSpellCheckResult
 import uno.d1s.yaspeller.domain.internal.InternalSpellCheckResult
 import uno.d1s.yaspeller.dsl.RequestConfigurationDsl
 import uno.d1s.yaspeller.exception.SpellCheckFailedException
 import uno.d1s.yaspeller.exception.TooLongTextException
 import uno.d1s.yaspeller.service.YandexSpellerService
+import uno.d1s.yaspeller.util.setParameter
+
 
 internal object YandexSpellerServiceImpl : YandexSpellerService {
 
+    private val gson = Gson()
+
+    private val httpClient = OkHttpClient()
+
     private var defaultConfig: RequestConfigurationDsl.() -> Unit = {}
-
-    private val httpClient: HttpClient = HttpClient(OkHttp) {
-        install(JsonFeature)
-
-        // all of this just because of "Header(s) [Content-Type] are controlled by the engine and cannot be set explicitly"
-        engine {
-            addNetworkInterceptor { chain ->
-                chain.proceed(
-                    chain.request().newBuilder()
-                        .addHeader("Content-Type", "application/json").build()
-                )
-            }
-        }
-    }
 
     override suspend fun checkText(
         text: String,
         configuration: RequestConfigurationDsl.() -> Unit
-    ): TextSpellCheckResult {
+    ): TextSpellCheckResult = withContext(Dispatchers.Default) {
         if (text.length > MAX_TEXT_LENGTH) {
             throw TooLongTextException
         }
 
-        val config = RequestConfigurationDsl().apply(defaultConfig).apply(configuration).toInternal()
-
         try {
-            val results = httpClient.post<List<InternalSpellCheckResult>>(BASE_URL) {
-                parameter(PARAMETER_LANGUAGE, config.languages)
-                parameter(PARAMETER_TEXT, text)
-                parameter(PARAMETER_OPTIONS, config.options)
-                parameter(PARAMETER_FORMAT, config.format)
-            }.map {
-                it.toApi()
-            }
+            val results = this@YandexSpellerServiceImpl.getSpellCheckResults(configuration, text)
 
-            var improvedText = text
-
-            results.forEach {
-                improvedText = improvedText.replace(it.word, it.firstSuggestion)
-            }
-
-            return TextSpellCheckResult(
+            return@withContext TextSpellCheckResult(
                 results.isEmpty(),
                 results.size,
                 results.map {
@@ -66,7 +46,7 @@ internal object YandexSpellerServiceImpl : YandexSpellerService {
                     it.firstSuggestion
                 },
                 results,
-                improvedText
+                this@YandexSpellerServiceImpl.getImprovedText(results, text)
             )
         } catch (ex: Exception) {
             throw SpellCheckFailedException("Spell check failed: ${ex.message ?: "no message provided."}")
@@ -78,4 +58,39 @@ internal object YandexSpellerServiceImpl : YandexSpellerService {
     }
 
     override fun getDefaultConfiguration(): RequestConfigurationDsl.() -> Unit = defaultConfig
+
+    private fun getSpellCheckResults(
+        configuration: RequestConfigurationDsl.() -> Unit,
+        text: String
+    ): List<WordSpellCheckResult> {
+        val config = RequestConfigurationDsl().apply(defaultConfig).apply(configuration).toInternal()
+
+        return gson.fromJson<ArrayList<InternalSpellCheckResult>>(
+            httpClient.newCall(
+                Request.Builder()
+                    .url(
+                        BASE_URL
+                            .setParameter(PARAMETER_LANGUAGES, config.languages)
+                            .setParameter(PARAMETER_TEXT, text)
+                            .setParameter(PARAMETER_OPTIONS, config.options.toString())
+                            .setParameter(PARAMETER_FORMAT, config.format)
+                    ).get().build()
+            ).execute().use {
+                it.body!!.string()
+            },
+            object : TypeToken<ArrayList<InternalSpellCheckResult>>() {}.type
+        ).map {
+            it.toApi()
+        }
+    }
+
+    private fun getImprovedText(results: List<WordSpellCheckResult>, text: String): String {
+        var improvedText = text
+
+        results.forEach {
+            improvedText = improvedText.replace(it.word, it.firstSuggestion)
+        }
+
+        return improvedText
+    }
 }

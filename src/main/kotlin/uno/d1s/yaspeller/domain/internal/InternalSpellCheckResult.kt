@@ -1,9 +1,7 @@
 package uno.d1s.yaspeller.domain.internal
 
-import kotlinx.serialization.Serializable
 import uno.d1s.yaspeller.domain.api.WordSpellCheckResult
 
-@Serializable
 internal class InternalSpellCheckResult(
     val code: Int,
     val pos: Int,

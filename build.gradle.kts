@@ -13,11 +13,14 @@ repositories {
     mavenCentral()
 }
 
-extra["ktorVersion"] = "1.6.7"
+extra["gsonVersion"] = "2.8.9"
+extra["okhttpVersion"] = "5.0.0-alpha.3"
+extra["coroutinesVersion"] = "1.6.0"
 
 dependencies {
-    implementation("io.ktor:ktor-client-okhttp:${property("ktorVersion")}")
-    implementation("io.ktor:ktor-client-serialization:${property("ktorVersion")}")
+    implementation("com.google.code.gson:gson:${property("gsonVersion")}")
+    implementation("com.squareup.okhttp3:okhttp:${property("okhttpVersion")}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${property("coroutinesVersion")}")
     implementation(kotlin("stdlib"))
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-annotations-common"))
