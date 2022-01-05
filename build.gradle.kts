@@ -16,9 +16,9 @@ extra["ktorVersion"] = "1.6.7"
 extra["okhttpVersion"] = "4.9.3"
 
 dependencies {
-    api("com.squareup.okhttp3:okhttp:${property("okhttpVersion")}")
-    api("io.ktor:ktor-client-okhttp:${property("ktorVersion")}")
-    api("io.ktor:ktor-client-serialization:${property("ktorVersion")}")
+    implementation("com.squareup.okhttp3:okhttp:${property("okhttpVersion")}")
+    implementation("io.ktor:ktor-client-okhttp:${property("ktorVersion")}")
+    implementation("io.ktor:ktor-client-serialization:${property("ktorVersion")}")
     implementation(kotlin("stdlib"))
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-annotations-common"))
