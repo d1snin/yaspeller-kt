@@ -1,4 +1,5 @@
 plugins {
+    id("maven-publish")
     id("java-library")
     id("com.github.johnrengelman.shadow") version "7.1.2"
     kotlin("jvm") version "1.6.10"
@@ -24,4 +25,12 @@ dependencies {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     sourceCompatibility = "1.8"
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("yaspeller-kt") {
+            from(components["java"])
+        }
+    }
 }
