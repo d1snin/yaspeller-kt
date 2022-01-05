@@ -15,9 +15,9 @@ repositories {
 extra["ktorVersion"] = "1.6.7"
 
 dependencies {
+    api("io.ktor:ktor-client-okhttp:${property("ktorVersion")}")
+    api("io.ktor:ktor-client-serialization:${property("ktorVersion")}")
     implementation(kotlin("stdlib"))
-    implementation("io.ktor:ktor-client-okhttp:${property("ktorVersion")}")
-    implementation("io.ktor:ktor-client-serialization:${property("ktorVersion")}")
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-annotations-common"))
 }
