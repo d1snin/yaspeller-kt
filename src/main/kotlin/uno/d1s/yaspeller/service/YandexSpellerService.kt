@@ -11,4 +11,6 @@ internal interface YandexSpellerService {
     ): TextSpellCheckResult
 
     fun setDefaultConfiguration(configuration: RequestConfigurationDsl.() -> Unit)
+
+    fun getDefaultConfiguration(): RequestConfigurationDsl.() -> Unit
 }

@@ -76,4 +76,6 @@ internal object YandexSpellerServiceImpl : YandexSpellerService {
     override fun setDefaultConfiguration(configuration: RequestConfigurationDsl.() -> Unit) {
         defaultConfig = configuration
     }
+
+    override fun getDefaultConfiguration(): RequestConfigurationDsl.() -> Unit = defaultConfig
 }
