@@ -4,14 +4,12 @@
 Asynchronous Yandex.Speller API wrapper for Kotlin/JVM.
 
 ### Installation
-```groovy
+```kotlin
 repositories {
-    maven { 
-        url 'https://jitpack.io' 
-    }
+    maven(url = "https://jitpack.io")
 }
 
-implementation 'com.github.d1snin:yaspeller-kt:0.2.1-beta.2'
+implementation("com.github.d1snin:yaspeller-kt:$yaspellerVersion")
 ```
 
 ### Example usage
