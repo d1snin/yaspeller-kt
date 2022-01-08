@@ -31,7 +31,11 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 }
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
-    archiveFileName.set("${project.name}-${project.version}.jar")
+    archiveClassifier.set("")
+}
+
+tasks.build {
+    dependsOn("shadowJar")
 }
 
 publishing {
