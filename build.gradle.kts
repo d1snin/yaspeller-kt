@@ -30,6 +30,10 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     sourceCompatibility = "1.8"
 }
 
+tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+    archiveFileName.set("${project.name}-${project.version}.jar")
+}
+
 publishing {
     publications {
         create<MavenPublication>("yaspeller-kt") {
