@@ -1,7 +1,6 @@
 plugins {
     id("maven-publish")
     id("java-library")
-    id("com.github.johnrengelman.shadow") version "7.1.2"
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.serialization") version "1.4.21"
 }
@@ -28,14 +27,6 @@ dependencies {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     sourceCompatibility = "1.8"
-}
-
-tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
-    archiveClassifier.set("")
-}
-
-tasks.build {
-    dependsOn("shadowJar")
 }
 
 publishing {
