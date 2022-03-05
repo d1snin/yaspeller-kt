@@ -1,4 +1,4 @@
-package uno.d1s.yaspeller.domain.api
+package dev.d1s.yaspeller.domain.api
 
 enum class Option(val optionValue: Int) {
     // FIND_REPEAT_WORDS is not available, because this option is mainly used for HTML responses.

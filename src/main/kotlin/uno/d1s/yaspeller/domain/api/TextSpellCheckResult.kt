@@ -1,4 +1,4 @@
-package uno.d1s.yaspeller.domain.api
+package dev.d1s.yaspeller.domain.api
 
 data class TextSpellCheckResult(
     val isValid: Boolean,

@@ -1,4 +1,4 @@
-package uno.d1s.yaspeller.domain.internal
+package dev.d1s.yaspeller.domain.internal
 
 internal class InternalRequestConfiguration(
     val languages: String,

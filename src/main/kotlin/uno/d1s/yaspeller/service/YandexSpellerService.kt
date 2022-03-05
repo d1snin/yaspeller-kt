@@ -1,7 +1,7 @@
-package uno.d1s.yaspeller.service
+package dev.d1s.yaspeller.service
 
-import uno.d1s.yaspeller.domain.api.TextSpellCheckResult
-import uno.d1s.yaspeller.dsl.RequestConfigurationDsl
+import dev.d1s.yaspeller.domain.api.TextSpellCheckResult
+import dev.d1s.yaspeller.dsl.RequestConfigurationDsl
 
 internal interface YandexSpellerService {
 

@@ -1,4 +1,4 @@
-package uno.d1s.yaspeller.service.impl
+package dev.d1s.yaspeller.service.impl
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -6,15 +6,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import uno.d1s.yaspeller.constant.*
-import uno.d1s.yaspeller.domain.api.TextSpellCheckResult
-import uno.d1s.yaspeller.domain.api.WordSpellCheckResult
-import uno.d1s.yaspeller.domain.internal.InternalSpellCheckResult
-import uno.d1s.yaspeller.dsl.RequestConfigurationDsl
-import uno.d1s.yaspeller.exception.SpellCheckFailedException
-import uno.d1s.yaspeller.exception.TooLongTextException
-import uno.d1s.yaspeller.service.YandexSpellerService
-import uno.d1s.yaspeller.util.setParameter
+import dev.d1s.yaspeller.constant.*
+import dev.d1s.yaspeller.domain.api.TextSpellCheckResult
+import dev.d1s.yaspeller.domain.api.WordSpellCheckResult
+import dev.d1s.yaspeller.domain.internal.InternalSpellCheckResult
+import dev.d1s.yaspeller.dsl.RequestConfigurationDsl
+import dev.d1s.yaspeller.exception.SpellCheckFailedException
+import dev.d1s.yaspeller.exception.TooLongTextException
+import dev.d1s.yaspeller.service.YandexSpellerService
+import dev.d1s.yaspeller.util.setParameter
 
 
 internal object YandexSpellerServiceImpl : YandexSpellerService {
@@ -28,7 +28,7 @@ internal object YandexSpellerServiceImpl : YandexSpellerService {
     override suspend fun checkText(
         text: String,
         configuration: RequestConfigurationDsl.() -> Unit
-    ): TextSpellCheckResult = withContext(Dispatchers.Default) {
+    ): TextSpellCheckResult = withContext(Dispatchers.IO) {
         if (text.length > MAX_TEXT_LENGTH) {
             throw TooLongTextException
         }

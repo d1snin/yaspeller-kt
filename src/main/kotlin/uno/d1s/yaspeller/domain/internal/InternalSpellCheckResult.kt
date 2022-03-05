@@ -1,6 +1,6 @@
-package uno.d1s.yaspeller.domain.internal
+package dev.d1s.yaspeller.domain.internal
 
-import uno.d1s.yaspeller.domain.api.WordSpellCheckResult
+import dev.d1s.yaspeller.domain.api.WordSpellCheckResult
 
 internal class InternalSpellCheckResult(
     val code: Int,

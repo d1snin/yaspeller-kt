@@ -1,7 +1,7 @@
-package uno.d1s.yaspeller
+package dev.d1s.yaspeller
 
-import uno.d1s.yaspeller.dsl.RequestConfigurationDsl
-import uno.d1s.yaspeller.factory.yandexSpeller
+import dev.d1s.yaspeller.dsl.RequestConfigurationDsl
+import dev.d1s.yaspeller.factory.yandexSpeller
 
 internal val yaSpeller = yandexSpeller()
 

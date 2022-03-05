@@ -1,4 +1,4 @@
-package uno.d1s.yaspeller
+package dev.d1s.yaspeller
 
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test

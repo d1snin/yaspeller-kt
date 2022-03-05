@@ -5,21 +5,21 @@ plugins {
     kotlin("plugin.serialization") version "1.4.21"
 }
 
-group = "uno.d1s"
-version = "0.2.2-beta.2"
+group = "dev.d1s"
+version = "0.2.3-beta.0"
 
 repositories {
     mavenCentral()
 }
 
-extra["gsonVersion"] = "2.8.9"
-extra["okhttpVersion"] = "5.0.0-alpha.3"
-extra["coroutinesVersion"] = "1.6.0"
+val gsonVersion: String by project
+val okhttpVersion: String by project
+val coroutinesVersion: String by project
 
 dependencies {
-    implementation("com.google.code.gson:gson:${property("gsonVersion")}")
-    implementation("com.squareup.okhttp3:okhttp:${property("okhttpVersion")}")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${property("coroutinesVersion")}")
+    implementation("com.google.code.gson:gson:$gsonVersion")
+    implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
     implementation(kotlin("stdlib"))
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-annotations-common"))

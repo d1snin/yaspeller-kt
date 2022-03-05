@@ -1,4 +1,4 @@
-package uno.d1s.yaspeller.constant
+package dev.d1s.yaspeller.constant
 
 internal const val MAX_TEXT_LENGTH = 10000
 

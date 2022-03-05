@@ -1,11 +1,11 @@
-package uno.d1s.yaspeller.dsl
+package dev.d1s.yaspeller.dsl
 
-import uno.d1s.yaspeller.domain.api.Format
-import uno.d1s.yaspeller.domain.api.Language
-import uno.d1s.yaspeller.domain.api.Option
-import uno.d1s.yaspeller.domain.internal.InternalRequestConfiguration
-import uno.d1s.yaspeller.dsl.marker.YaSpellerDslMarker
-import uno.d1s.yaspeller.util.toCommaSeparatedString
+import dev.d1s.yaspeller.domain.api.Format
+import dev.d1s.yaspeller.domain.api.Language
+import dev.d1s.yaspeller.domain.api.Option
+import dev.d1s.yaspeller.domain.internal.InternalRequestConfiguration
+import dev.d1s.yaspeller.dsl.marker.YaSpellerDslMarker
+import dev.d1s.yaspeller.util.toCommaSeparatedString
 
 @YaSpellerDslMarker
 class RequestConfigurationDsl {
