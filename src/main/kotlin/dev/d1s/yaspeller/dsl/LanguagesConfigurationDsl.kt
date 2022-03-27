@@ -1,21 +1,22 @@
 package dev.d1s.yaspeller.dsl
 
-import dev.d1s.yaspeller.domain.api.Language
+import dev.d1s.yaspeller.domain.Language
 import dev.d1s.yaspeller.dsl.marker.YaSpellerDslMarker
 
 @YaSpellerDslMarker
-class LanguagesConfigurationDsl {
-    internal val languageSet = mutableSetOf<Language>()
+public class LanguagesConfigurationDsl {
 
-    fun russian() {
+    public val languageSet: MutableSet<Language> = mutableSetOf<Language>()
+
+    public fun russian() {
         languageSet.add(Language.RUSSIAN)
     }
 
-    fun ukrainian() {
+    public fun ukrainian() {
         languageSet.add(Language.UKRAINIAN)
     }
 
-    fun english() {
+    public fun english() {
         languageSet.add(Language.ENGLISH)
     }
 }

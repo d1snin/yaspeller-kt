@@ -1,26 +1,26 @@
 package dev.d1s.yaspeller.dsl
 
-import dev.d1s.yaspeller.domain.api.Option
+import dev.d1s.yaspeller.domain.Option
 import dev.d1s.yaspeller.dsl.marker.YaSpellerDslMarker
 
 @YaSpellerDslMarker
-class OptionsConfigurationDsl {
+public class OptionsConfigurationDsl {
 
-    internal val optionsSet = mutableSetOf<Option>()
+    public val optionsSet: MutableSet<Option> = mutableSetOf<Option>()
 
-    var ignoreDigits: Boolean = false
+    public var ignoreDigits: Boolean = false
         set(value) {
             value.add(Option.IGNORE_DIGITS)
             field = value
         }
 
-    var ignoreUrls: Boolean = false
+    public var ignoreUrls: Boolean = false
         set(value) {
             value.add(Option.IGNORE_URLS)
             field = value
         }
 
-    var ignoreCapitalization: Boolean = false
+    public var ignoreCapitalization: Boolean = false
         set(value) {
             value.add(Option.IGNORE_CAPITALIZATION)
             field = value

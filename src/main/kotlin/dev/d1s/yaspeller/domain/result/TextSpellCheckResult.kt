@@ -1,6 +1,6 @@
-package dev.d1s.yaspeller.domain.api
+package dev.d1s.yaspeller.domain.result
 
-data class TextSpellCheckResult(
+public data class TextSpellCheckResult(
     val isValid: Boolean,
     val totalMisspelledWords: Int,
     val misspelledWords: List<String>,

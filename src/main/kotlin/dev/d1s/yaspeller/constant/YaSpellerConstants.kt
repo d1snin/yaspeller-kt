@@ -8,9 +8,4 @@ internal const val PARAMETER_OPTIONS = "options"
 internal const val PARAMETER_FORMAT = "format"
 
 // using the json format.
-internal const val BASE_URL =
-    "https://speller.yandex.net/services/spellservice.json/checkText" +
-            "?$PARAMETER_LANGUAGES={$PARAMETER_LANGUAGES}" +
-            "&$PARAMETER_TEXT={$PARAMETER_TEXT}" +
-            "&$PARAMETER_OPTIONS={$PARAMETER_OPTIONS}" +
-            "&$PARAMETER_FORMAT={$PARAMETER_FORMAT}"
+internal const val BASE_URL = "https://speller.yandex.net/services/spellservice.json/checkText"

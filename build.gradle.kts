@@ -10,19 +10,22 @@ version = "0.2.3-beta.1"
 
 repositories {
     mavenCentral()
+    maven(url = "https://jitpack.io/")
 }
 
 val gsonVersion: String by project
-val okhttpVersion: String by project
+val fuelVersion: String by project
 val coroutinesVersion: String by project
+val striktVersion: String by project
 
 dependencies {
     implementation("com.google.code.gson:gson:$gsonVersion")
-    implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
+    implementation("com.github.kittinunf.fuel:fuel:$fuelVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
     implementation(kotlin("stdlib"))
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-annotations-common"))
+    testImplementation("io.strikt:strikt-jvm:$striktVersion")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
@@ -35,4 +38,8 @@ publishing {
             from(components["java"])
         }
     }
+}
+
+kotlin {
+    explicitApiWarning()
 }

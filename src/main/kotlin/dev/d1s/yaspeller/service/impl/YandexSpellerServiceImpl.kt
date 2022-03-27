@@ -1,91 +1,81 @@
 package dev.d1s.yaspeller.service.impl
 
-import com.google.gson.Gson
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.Headers
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import dev.d1s.yaspeller.constant.*
-import dev.d1s.yaspeller.domain.api.TextSpellCheckResult
-import dev.d1s.yaspeller.domain.api.WordSpellCheckResult
-import dev.d1s.yaspeller.domain.internal.InternalSpellCheckResult
+import dev.d1s.yaspeller.domain.result.TextSpellCheckResult
+import dev.d1s.yaspeller.domain.result.WordSpellCheckResult
 import dev.d1s.yaspeller.dsl.RequestConfigurationDsl
 import dev.d1s.yaspeller.exception.SpellCheckFailedException
-import dev.d1s.yaspeller.exception.TooLongTextException
+import dev.d1s.yaspeller.factory.defaultRequestConfiguration
+import dev.d1s.yaspeller.factory.gson
 import dev.d1s.yaspeller.service.YandexSpellerService
-import dev.d1s.yaspeller.util.setParameter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.util.concurrent.atomic.AtomicReference
 
+internal class YandexSpellerServiceImpl : YandexSpellerService {
 
-internal object YandexSpellerServiceImpl : YandexSpellerService {
+    private val requestConfiguration: AtomicReference<RequestConfigurationDsl> = AtomicReference(
+        defaultRequestConfiguration()
+    )
 
-    private val gson = Gson()
+    private val gson = gson()
 
-    private val httpClient = OkHttpClient()
-
-    private var defaultConfig: RequestConfigurationDsl.() -> Unit = {}
-
-    override suspend fun checkText(
-        text: String,
-        configuration: RequestConfigurationDsl.() -> Unit
-    ): TextSpellCheckResult = withContext(Dispatchers.IO) {
+    override suspend fun checkText(text: String): TextSpellCheckResult = withContext(Dispatchers.IO) {
         if (text.length > MAX_TEXT_LENGTH) {
-            throw TooLongTextException
+            throw SpellCheckFailedException("Provided text is too long. Should be less than $MAX_TEXT_LENGTH")
         }
 
-        try {
-            val results = this@YandexSpellerServiceImpl.getSpellCheckResults(configuration, text)
+        val results = this@YandexSpellerServiceImpl.getSpellCheckResults(text)
 
-            return@withContext TextSpellCheckResult(
-                results.isEmpty(),
-                results.size,
-                results.map {
-                    it.word
-                },
-                results.map {
-                    it.firstSuggestion
-                },
-                results,
-                this@YandexSpellerServiceImpl.getImprovedText(results, text)
-            )
-        } catch (ex: Exception) {
-            throw SpellCheckFailedException("Spell check failed: ${ex.message ?: "no message provided."}")
-        }
-    }
-
-    override fun setDefaultConfiguration(configuration: RequestConfigurationDsl.() -> Unit) {
-        defaultConfig = configuration
-    }
-
-    override fun getDefaultConfiguration(): RequestConfigurationDsl.() -> Unit = defaultConfig
-
-    private fun getSpellCheckResults(
-        configuration: RequestConfigurationDsl.() -> Unit,
-        text: String
-    ): List<WordSpellCheckResult> {
-        val config = RequestConfigurationDsl().apply(defaultConfig).apply(configuration).toInternal()
-
-        return gson.fromJson<ArrayList<InternalSpellCheckResult>>(
-            httpClient.newCall(
-                Request.Builder()
-                    .url(
-                        BASE_URL
-                            .setParameter(PARAMETER_LANGUAGES, config.languages)
-                            .setParameter(PARAMETER_TEXT, text)
-                            .setParameter(PARAMETER_OPTIONS, config.options.toString())
-                            .setParameter(PARAMETER_FORMAT, config.format)
-                    ).get().build()
-            ).execute().use {
-                it.body!!.string()
+        return@withContext TextSpellCheckResult(
+            results.isEmpty(),
+            results.size,
+            results.map {
+                it.word
             },
-            object : TypeToken<ArrayList<InternalSpellCheckResult>>() {}.type
-        ).map {
-            it.toApi()
-        }
+            results.map {
+                it.firstSuggestion
+            },
+            results,
+            text.improved(results)
+        )
     }
 
-    private fun getImprovedText(results: List<WordSpellCheckResult>, text: String): String {
-        var improvedText = text
+    override fun updateConfiguration(configuration: RequestConfigurationDsl.() -> Unit) {
+        requestConfiguration.set(requestConfiguration.get().apply(configuration))
+    }
+
+    private fun getSpellCheckResults(text: String): List<WordSpellCheckResult> {
+        val config = requestConfiguration.get().toInternalConfiguration()
+
+        val (_, _, result) = Fuel.get(
+            BASE_URL,
+            listOf(
+                PARAMETER_LANGUAGES to config.languages,
+                PARAMETER_TEXT to text,
+                PARAMETER_OPTIONS to config.options.toString(),
+                PARAMETER_FORMAT to config.format
+            )
+        ).header(Headers.ACCEPT to "application/json")
+            .response()
+
+        val (bytes, error) = result
+
+        error?.let {
+            throw SpellCheckFailedException(it.response.toString())
+        }
+
+        return gson.fromJson(
+            String(bytes!!),
+            object : TypeToken<List<WordSpellCheckResult>>() {}.type
+        )
+    }
+
+    private fun String.improved(results: List<WordSpellCheckResult>): String {
+        var improvedText = this
 
         results.forEach {
             improvedText = improvedText.replace(it.word, it.firstSuggestion)
