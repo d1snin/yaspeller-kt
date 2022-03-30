@@ -16,9 +16,11 @@ dependencies {
 
 ### Example usage
 ```kotlin
+private val speller = yandexSpeller()
+
 suspend fun main() {
     val word = "hawdwawe"
-    val suggestion = word.checkSpelling().improvedText
+    val suggestion = speller.checkSpelling(word).improvedText
     println(suggestion) // hardware
 }
 ```
