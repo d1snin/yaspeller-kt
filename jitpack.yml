@@ -1,4 +1,4 @@
 install:
-  - echo "Building Shadowjar"
+  - echo "Building"
   - chmod +x ./gradlew
   - ./gradlew build publishToMavenLocal

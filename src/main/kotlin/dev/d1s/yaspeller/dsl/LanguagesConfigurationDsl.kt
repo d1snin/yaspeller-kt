@@ -6,7 +6,7 @@ import dev.d1s.yaspeller.dsl.marker.YaSpellerDslMarker
 @YaSpellerDslMarker
 public class LanguagesConfigurationDsl {
 
-    public val languageSet: MutableSet<Language> = mutableSetOf<Language>()
+    public val languageSet: MutableSet<Language> = mutableSetOf()
 
     public fun russian() {
         languageSet.add(Language.RUSSIAN)

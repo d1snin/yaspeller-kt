@@ -1,6 +1,6 @@
 package dev.d1s.yaspeller.constant
 
-internal const val MAX_TEXT_LENGTH = 10000
+internal const val MAX_TEXT_LENGTH = 10_000
 
 internal const val PARAMETER_LANGUAGES = "lang"
 internal const val PARAMETER_TEXT = "text"

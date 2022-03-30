@@ -17,6 +17,8 @@ val gsonVersion: String by project
 val fuelVersion: String by project
 val coroutinesVersion: String by project
 val striktVersion: String by project
+val mockkVersion: String by project
+val teabagsVersion: String by project
 
 dependencies {
     implementation("com.google.code.gson:gson:$gsonVersion")
@@ -26,6 +28,8 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-annotations-common"))
     testImplementation("io.strikt:strikt-jvm:$striktVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("dev.d1s.teabags:teabag-testing:$teabagsVersion")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
