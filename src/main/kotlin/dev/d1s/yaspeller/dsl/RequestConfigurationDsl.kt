@@ -17,14 +17,17 @@ public class RequestConfigurationDsl {
     public val plain: Format = Format.PLAIN_TEXT
     public val html: Format = Format.HTML
 
+    @YaSpellerDslMarker
     public fun languages(languagesConfig: LanguagesConfigurationDsl.() -> Unit) {
         languages = LanguagesConfigurationDsl().apply(languagesConfig).languageSet
     }
 
+    @YaSpellerDslMarker
     public fun options(optionsConfig: OptionsConfigurationDsl.() -> Unit) {
         options = OptionsConfigurationDsl().apply(optionsConfig).optionsSet
     }
 
+    @YaSpellerDslMarker
     public fun format(formatConfig: () -> Format) {
         format = formatConfig()
     }
