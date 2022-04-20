@@ -2,7 +2,6 @@ plugins {
     id("maven-publish")
     id("java-library")
     kotlin("jvm") version "1.6.10"
-    kotlin("plugin.serialization") version "1.4.21"
 }
 
 group = "dev.d1s"
